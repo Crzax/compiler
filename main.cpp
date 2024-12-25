@@ -11,13 +11,13 @@ using namespace std;
 
 int main()
 {
-    //词法分析部分
+    //词法分析
     initNode();
     scanner();
     BraMappingError();
     printInfo();
 
-    //语法分析部分
+    //语法分析
     initGrammer();
     First();
     Follow();

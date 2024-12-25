@@ -176,7 +176,7 @@ void printNodeLink(ostream& outFile)
 {
     NormalNode * p = normalHead;
     p = p->next;
-    outFile<<"************************************分析表******************************"<<endl<<endl;
+    outFile<<"----------------------------------符号表----------------------------------"<<endl<<endl;
     outFile<<setw(30)<<"内容"<<setw(10)<<"描述"<<"\t"<<"种别码"<<"\t"<<"地址"<<"\t"<<"行号"<<endl;
     while(p!=NULL)
     {
@@ -207,7 +207,7 @@ void printErrorLink(ostream& outFile)
 {
     ErrorNode * p = errorHead;
     p = p->next;
-    outFile<<"************************************错误表******************************"<<endl<<endl;
+    outFile<<"----------------------------------错误表----------------------------------"<<endl<<endl;
     outFile<<setw(10)<<"内容"<<setw(30)<<"描述"<<"\t"<<"类型"<<"\t"<<"行号"<<endl;
     while(p!=NULL)
     {
@@ -221,7 +221,7 @@ void printIdentLink(ostream& outFile)
 {
     IdentiferNode * p = idenHead;
     p = p->next;
-    outFile<<"************************************标志符表******************************"<<endl<<endl;
+    outFile<<"----------------------------------标志符表----------------------------------"<<endl<<endl;
     outFile<<setw(30)<<"内容"<<setw(10)<<"描述"<<"\t"<<"种别码"<<"\t"<<"地址"<<"\t"<<"行号"<<endl;
     while(p!=NULL)
     {
