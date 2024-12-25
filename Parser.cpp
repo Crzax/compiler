@@ -10,7 +10,7 @@
 #include "Lex.h"
 #include <stack>
 #include "Parser.h"
-#include <algorithm> // Add this header for reverse and other algorithm utilities
+#include <queue>
 
 using namespace std;
 
@@ -1121,8 +1121,24 @@ void LL1Table()
     }
     outfile.close();
 }
+struct TreeNode {
+    int symbol;                     // 节点的符号 (终结符或非终结符编号)
+    vector<TreeNode*> children;     // 子节点列表
 
-void ShowStack(std::stack<int> s, std::fstream &resultfile)  // 传递栈的副本
+    TreeNode(int s) : symbol(s) {}  // 构造函数
+};
+void ShowStack1(std::stack<TreeNode*> s, std::fstream &resultfile)  // 处理语法树节点栈
+{
+    // 遍历栈中的每个节点并输出其符号
+    while (!s.empty()) {
+        TreeNode* node = s.top();  // 获取栈顶元素
+        resultfile << searchMapping(node->symbol) << " ";  // 输出符号
+        s.pop();  // 弹出栈顶元素
+    }
+}
+
+
+void ShowStack2(std::stack<int> s, std::fstream &resultfile)  // 传递栈的副本
 {
     // 将原栈的内容拷贝到另一个栈用于输出
     while (!s.empty()) {
@@ -1131,165 +1147,174 @@ void ShowStack(std::stack<int> s, std::fstream &resultfile)  // 传递栈的副�
     }
 }
 
-//分析源程序
+
+// 使用广度优先遍历 (BFS) 输出语法树
+void PrintSyntaxTree(TreeNode* root, std::fstream& resultfile) {
+    if (!root) return;
+
+    // 定义队列，用于存储节点及对应的深度
+    std::queue<std::pair<TreeNode*, int>> nodeQueue;
+
+    // 将根节点和深度 0 入队
+    nodeQueue.push({root, 0});
+
+    // 开始 BFS 遍历
+    while (!nodeQueue.empty()) {
+        // 获取队首元素
+        auto current = nodeQueue.front();
+        TreeNode* node = current.first; // 当前节点
+        int depth = current.second;     // 当前节点的深度
+        nodeQueue.pop();
+
+        // 输出当前节点，使用深度控制缩进
+        for (int i = 0; i < depth; i++) {
+            resultfile << "  ";  // 每层缩进两个空格
+        }
+        resultfile << searchMapping(node->symbol) << "\n";
+
+        // 将子节点及其深度入队
+        for (TreeNode* child : node->children) {
+            nodeQueue.push({child, depth + 1});
+        }
+    }
+}
+
+// 分析源程序
 void Analysis()
 {
-    //分析结果输出  
-    resultfile.open("ParserResult.txt",ios::out);
+    // 分析结果输出
+    resultfile.open("ParserResult.txt", ios::out);
 
-    stack<int> s1,s2;
-    int c1,c2;
+    stack<TreeNode*> s1;  // 符号栈，改为存储 TreeNode* 类型
+    stack<int> s2;        // 输入栈，仍然存储输入符号
+    int c1, c2;
     int i = 0;
-    int reserve[Stack_Size];//符号栈反向入栈  
-    NormalNode * p = normalHead;
+    int reserve[Stack_Size]; // 符号栈反向入栈
+    NormalNode* p = normalHead;
     int s1Length = 0;
-    memset(reserve,-1,sizeof(reserve));
+    memset(reserve, -1, sizeof(reserve));
 
-    s1.push(GRAMMAR_SPECIAL);
-    s1.push(proc[1][1]);
-    s2.push(GRAMMAR_SPECIAL);
+    // 初始化语法树的根节点
+    TreeNode* root = new TreeNode(proc[1][1]); // 假设起始符号为 proc[1][1]
+    TreeNode* end = new TreeNode(GRAMMAR_SPECIAL); // 假设起始符号为 proc[1][1]
+    s1.push(end);                             // 符号栈压入起始符号节点
+    s1.push(root);                             // 符号栈压入起始符号节点
+    s2.push(GRAMMAR_SPECIAL);                  // 输入栈压入 #
 
+    // 构造输入串并反向入栈
     p = p->next;
-    while(p!=NULL)
-    {
-
-        if(p->type == AUTO || p->type == CONST || p->type == UNSIGNED || p->type == SIGNED
-           || p->type ==STATIC || p->type == VOLATILE )
-        {
-            reserve[i++] =  DESCRIBE;
-        }
-        else if(p->type == INT_VAL)
-        {
-            reserve[i++] =  DIGIT;
-        }
-        else if(p->type == CHAR || p->type == DOUBLE || p->type == FLOAT || p->type == INT ||
-                p->type == LONG || p->type == SHORT || p->type == VOID)
-        {
-            reserve[i++] =  TYPE;
-        }
-        else if(p->type == STRING_VAL)
-        {
-            reserve[i++] =  STRING;
-        }
-        else if(p->type == DOU_QUE || p->type == SIN_QUE)
-        {
-
-        }
-        else
-        {
-            reserve[i++] =  p->type;
+    while (p != NULL) {
+        if (p->type == AUTO || p->type == CONST || p->type == UNSIGNED || p->type == SIGNED ||
+            p->type == STATIC || p->type == VOLATILE) {
+            reserve[i++] = DESCRIBE;
+        } else if (p->type == INT_VAL) {
+            reserve[i++] = DIGIT;
+        } else if (p->type == CHAR || p->type == DOUBLE || p->type == FLOAT || p->type == INT ||
+                   p->type == LONG || p->type == SHORT || p->type == VOID) {
+            reserve[i++] = TYPE;
+        } else if (p->type == STRING_VAL) {
+            reserve[i++] = STRING;
+        } else if (p->type == DOU_QUE || p->type == SIN_QUE) {
+            // 跳过
+        } else {
+            reserve[i++] = p->type;
         }
         p = p->next;
     }
-    //求左边栈的长度  
-    for(s1Length = 0;; s1Length++)
-    {
-        if(reserve[s1Length] == -1)
-        {
+
+    // 输入串反向入栈
+    for (s1Length = 0;; s1Length++) {
+        if (reserve[s1Length] == -1) {
             break;
         }
     }
-    //反向入栈  
-    for(i = s1Length; i>0; i--)
-    {
-        s2.push(reserve[i-1]);
+    for (i = s1Length; i > 0; i--) {
+        s2.push(reserve[i - 1]);
     }
 
-    for(i=0;; i++)   /*分析*/
-    {
+    // 开始分析
+    for (i = 0;; i++) {
         int flag = 0;
-        int h1;
-        int h2;
-        resultfile<<"第"<<i + 1<<"步"<<endl;
-        resultfile<<"分析栈:";
-        ShowStack(s1, resultfile);
-        resultfile<<endl;
-        resultfile<<"遗留串:";
-        ShowStack(s2, resultfile);
-        resultfile<<endl;
+        int h1, h2;
+        resultfile << "第" << i + 1 << "步" << endl;
+        resultfile << "分析栈:";
+        ShowStack1(s1, resultfile); // 输出符号栈
+        resultfile << endl;
+        resultfile << "遗留串:";
+        ShowStack2(s2, resultfile); // 输出输入栈
+        resultfile << endl;
 
-        c1 = s1.top();
-        c2 = s2.top();
-        if(c1 == GRAMMAR_SPECIAL && c2 == GRAMMAR_SPECIAL)  /*当符号栈和输入栈都剩余#时，分析成功*/
-        {
-            resultfile<<"成功!"<<endl;
+        if (s1.empty() || s2.empty()) {
+            resultfile << "失败!" << endl;
             break;
         }
-        if(c1 == GRAMMAR_SPECIAL && c2!= GRAMMAR_SPECIAL)  /*当符号栈剩余#，而输入串未结束时，分析失败 */
-        {
-            resultfile<<"失败!"<<endl;
+
+        TreeNode* topNode = s1.top(); // 获取符号栈栈顶（当前分析的节点）
+        c1 = topNode->symbol;         // 当前节点的符号
+        c2 = s2.top();                // 输入栈栈顶的符号
+
+        if (c1 == GRAMMAR_SPECIAL && c2 == GRAMMAR_SPECIAL) {
+            resultfile << "成功!" << endl;
             break;
         }
-        if(c1 == c2)/*符号栈的栈顶元素和输入串的栈顶元素相同时，同时弹出*/
-        {
+        if (c1 == GRAMMAR_SPECIAL && c2 != GRAMMAR_SPECIAL) {
+            resultfile << "失败!" << endl;
+            break;
+        }
+
+        if (c1 == c2) {
+            // 符号栈和输入栈栈顶相同，表示匹配
             s1.pop();
             s2.pop();
             flag = 1;
-        }
-
-        else /*查预测分析表*/
-        {
-            //记录下非终结符的位置  
-            for(h1=0; h1<nonTerMap.size(); h1++)
-            {
-                if(nonTerMap[h1].second == c1)
-                {
+        } else {
+            // 查预测分析表
+            for (h1 = 0; h1 < nonTerMap.size(); h1++) {
+                if (nonTerMap[h1].second == c1) {
                     break;
                 }
             }
-            //记录下终结符的位置  
-            for(h2=0; h2<terMap.size(); h2++)
-            {
-                if(terMap[h2].second == c2)
-                {
+            for (h2 = 0; h2 < terMap.size(); h2++) {
+                if (terMap[h2].second == c2) {
                     break;
                 }
             }
-            if(LL1[h1][h2][0] == -1)
-            {
-                resultfile<<"Error"<<endl;
-                break;//如果错误的话，直接终止分析  
-            }
-            else
-            {
+            if (LL1[h1][h2][0] == -1) {
+                resultfile << "Error" << endl;
+                break;
+            } else {
                 int length = 0;
-                //记录下推导式的长度  
-                for(length = 0;; length++)
-                {
-                    if(LL1[h1][h2][length] == -1)
-                    {
+                for (length = 0;; length++) {
+                    if (LL1[h1][h2][length] == -1) {
                         break;
                     }
                 }
                 s1.pop();
-                //如果不是空的话，反向入栈  
-                if(LL1[h1][h2][2] != GRAMMAR_NULL)
-                {
-                    for(int k = length-1; k>=2; k--)
-                    {
-                        s1.push(LL1[h1][h2][k]);
+                if (LL1[h1][h2][2] != GRAMMAR_NULL) {
+                    // 创建子节点并反向压入符号栈
+                    for (int k = length - 1; k >= 2; k--) {
+                        TreeNode* childNode = new TreeNode(LL1[h1][h2][k]);
+                        topNode->children.push_back(childNode);
+                        s1.push(childNode); // 子节点压入符号栈
                     }
                 }
             }
         }
-        if(flag == 1)
-        {
-            resultfile<<"行为: "<<searchMapping(c1)<<"匹配"<<endl<<endl;
-        }
-        else
-        {
-            resultfile<<"行为: ";
-            int w = 0;
-            for(w = 0;; w++)
-            {
-                if(LL1[h1][h2][w] == -1)
-                {
-                    break;
-                }
-                resultfile<<searchMapping(LL1[h1][h2][w]);
+
+        if (flag == 1) {
+            resultfile << "行为: " << searchMapping(c1) << "匹配 " << endl << endl;
+        } else {
+            resultfile << "行为: ";
+            for (int w = 0; LL1[h1][h2][w] != -1; w++) {
+                resultfile << searchMapping(LL1[h1][h2][w]);
             }
-            resultfile<<endl<<endl;
+            resultfile << endl << endl;
         }
     }
+
+    // 输出语法树
+    resultfile << "\n----------------------------------语法树---------------------------------------" << endl;
+    PrintSyntaxTree(root, resultfile);
+
     resultfile.close();
 }
