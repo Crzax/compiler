@@ -22,7 +22,8 @@ using namespace std;
 #define Max_Length2 100
 
 int procNum = 0;
-//proc的维数都是从1开始的
+
+// proc的维数都是从1开始的
 int proc[Max_Proc][Max_Length]; // 产生式的数组，里边存储了终结符或者非终结符对应的编号
 int first[Max_Proc][Max_Length];
 int follow[Max_Proc][Max_Length];
@@ -38,7 +39,7 @@ int empty[Max_Proc]; // 可推出空的非终结符的编号
 int emptyRecu[Max_Proc]; // 在求可推出空的非终结符的编号集时使用的防止递归的集合
 int followRecu[Max_Proc]; // 在求Follow集时使用的防止递归的集合
 
-//extern的部分代表可能出现的终结符和其编号
+// extern的部分代表可能出现的终结符和其编号
 extern vector<pair<const char *,int> > keyMap;
 extern vector<pair<const char *,int> > operMap;
 extern vector<pair<const char *,int> > limitMap;
@@ -47,8 +48,8 @@ extern NormalNode * normalHead;//首结点
 
 fstream resultfile;
 
-vector<pair<const char *,int> > nonTerMap;//非终结符映射表,不可重复的
-vector<pair<const char *,int> > terMap;//终结符映射表,不可重复的
+vector<pair<const char *,int> > nonTerMap;// 非终结符映射表,不可重复的
+vector<pair<const char *,int> > terMap;// 终结符映射表,不可重复的
 // 将特殊符号映射表定义为静态常量
 const std::vector<std::pair<const char *, int>> specialMap = {
         {"->", GRAMMAR_ARROW},
@@ -677,7 +678,7 @@ void firstSet(int i)
     }
     firstVisit[i] = 1;
 }
-void First()
+void computeFirst()
 {
     // 打开文件输出流
     std::ofstream outFile("parser.txt");
@@ -697,7 +698,7 @@ void First()
     outFile<<"\n----------------------------------First集----------------------------------\n\n";
     for(int i=0; i<nonTerMap.size(); i++)
     {
-        outFile<<"First["<<nonTerMap[i].first<<"] = ";
+        outFile<<"computeFirst["<<nonTerMap[i].first<<"] = ";
         for(int j=0;; j++)
         {
             if(first[i][j] == -1)
@@ -947,7 +948,7 @@ void followSet(int i)
 }
 
 //求所有非终结符的Follow集  
-void Follow()
+void computeFollow()
 {
     // 打开文件输出流，并设置为追加模式
     std::ofstream outFile("parser.txt", std::ios::app);
@@ -965,7 +966,7 @@ void Follow()
     outFile<<"\n----------------------------------Follow集----------------------------------\n\n";
     for(int i=0; i<nonTerMap.size(); i++)
     {
-        outFile<<"Follow["<<nonTerMap[i].first<<"] = ";
+        outFile<<"computeFollow["<<nonTerMap[i].first<<"] = ";
         for(int j=0;; j++)
         {
             if(follow[i][j] == -1)
@@ -979,7 +980,7 @@ void Follow()
 }
 
 //求已经分解的产生式对应的Select集,注意Select集中不能含有空($),因而Type=2  
-void Select()
+void computeSelect()
 {
     // 打开文件输出流，并设置为追加模式
     std::ofstream outFile("parser.txt", std::ios::app);
@@ -1046,7 +1047,7 @@ void Select()
     outFile<<"\n-----------------------------Select集-----------------------------\n\n";
     for(int i=0; i < procNum; i++)
     {
-        outFile<<"Select["<<i+1<<"] = ";
+        outFile<<"computeSelect["<<i+1<<"] = ";
         for(int j=0;; j++)
         {
             if(select[i][j] == -1)
@@ -1147,7 +1148,6 @@ void ShowStack2(std::stack<int> s, std::fstream &resultfile)  // 传递栈的副
     }
 }
 
-
 // 使用广度优先遍历 (BFS) 输出语法树
 void PrintSyntaxTree(TreeNode* root, std::fstream& resultfile) {
     if (!root) return;
@@ -1179,12 +1179,11 @@ void PrintSyntaxTree(TreeNode* root, std::fstream& resultfile) {
     }
 }
 
-// 分析源程序
 void Analysis()
 {
     // 分析结果输出
     resultfile.open("ParserResult.txt", ios::out);
-
+    resultfile << "\n----------------------------------语法分析过程----------------------------------\n" << endl;
     stack<TreeNode*> s1;  // 符号栈，改为存储 TreeNode* 类型
     stack<int> s2;        // 输入栈，仍然存储输入符号
     int c1, c2;
@@ -1313,7 +1312,7 @@ void Analysis()
     }
 
     // 输出语法树
-    resultfile << "\n----------------------------------语法树---------------------------------------" << endl;
+    resultfile << "\n----------------------------------语法树---------------------------------------\n" << endl;
     PrintSyntaxTree(root, resultfile);
 
     resultfile.close();
