@@ -1,0 +1,167 @@
+
+
+----------------------------------First集----------------------------------
+
+computeFirst[<函数定义>] = describe type 
+computeFirst[<修饰词闭包>] = describe $ 
+computeFirst[<类型>] = type 
+computeFirst[<变量>] = id 
+computeFirst[<参数声明>] = describe type $ 
+computeFirst[<函数块>] = describe type id for if return while $ 
+computeFirst[<修饰词>] = describe 
+computeFirst[<取地址>] = * $ 
+computeFirst[<星号闭包>] = * $ 
+computeFirst[<星号>] = * 
+computeFirst[<标志符>] = id 
+computeFirst[<数组下标>] = [ $ 
+computeFirst[<因式>] = ( id digit 
+computeFirst[<表达式>] = ( id digit 
+computeFirst[<数字>] = digit 
+computeFirst[<因子>] = ( id digit 
+computeFirst[<项>] = + - $ 
+computeFirst[<因式递归>] = * / $ 
+computeFirst[<声明>] = describe type 
+computeFirst[<声明闭包>] = , $ 
+computeFirst[<赋初值>] = = += $ 
+computeFirst[<右值>] = ( id digit { 
+computeFirst[<多个数据>] = digit 
+computeFirst[<数字闭包>] = , $ 
+computeFirst[<声明语句闭包>] = describe type $ 
+computeFirst[<函数块闭包>] = id for if return while $ 
+computeFirst[<声明语句>] = describe type 
+computeFirst[<赋值函数>] = id 
+computeFirst[<for循环>] = for 
+computeFirst[<条件语句>] = if 
+computeFirst[<函数返回>] = return 
+computeFirst[<while循环>] = while 
+computeFirst[<赋值或函数调用>] = = += ( 
+computeFirst[<参数列表>] = id digit string 
+computeFirst[<参数>] = id digit string 
+computeFirst[<参数闭包>] = , $ 
+computeFirst[<字符串>] = string 
+computeFirst[<逻辑表达式>] = ( id digit 
+computeFirst[<后缀表达式>] = id 
+computeFirst[<逻辑运算符>] = < > == != 
+computeFirst[<后缀运算符>] = ++ -- 
+computeFirst[<否则语句>] = else $ 
+
+----------------------------------Follow集----------------------------------
+
+computeFollow[<函数定义>] = # 
+computeFollow[<修饰词闭包>] = type 
+computeFollow[<类型>] = id 
+computeFollow[<变量>] = ( ] ) , ; < > == != + - * / = += ++ -- 
+computeFollow[<参数声明>] = ) 
+computeFollow[<函数块>] = } 
+computeFollow[<修饰词>] = type describe 
+computeFollow[<取地址>] = id 
+computeFollow[<星号闭包>] = id 
+computeFollow[<星号>] = id * 
+computeFollow[<标志符>] = ( ] ) , ; < > == != + - * / = += ++ -- [ 
+computeFollow[<数组下标>] = ( ] ) , ; < > == != + - * / = += ++ -- 
+computeFollow[<因式>] = ] ) , ; < > == != + - * / 
+computeFollow[<表达式>] = ) , ; < > == != 
+computeFollow[<数字>] = ] ) , ; < > == != + - * / } 
+computeFollow[<因子>] = ) , ; < > == != + - 
+computeFollow[<项>] = ) , ; < > == != 
+computeFollow[<因式递归>] = ) , ; < > == != + - 
+computeFollow[<声明>] = ) , ; 
+computeFollow[<声明闭包>] = ) 
+computeFollow[<赋初值>] = ) , ; 
+computeFollow[<右值>] = ) , ; 
+computeFollow[<多个数据>] = } 
+computeFollow[<数字闭包>] = } 
+computeFollow[<声明语句闭包>] = } id for if return while 
+computeFollow[<函数块闭包>] = } 
+computeFollow[<声明语句>] = } id for if return while describe type 
+computeFollow[<赋值函数>] = } id for if return while ( digit 
+computeFollow[<for循环>] = } id for if return while 
+computeFollow[<条件语句>] = } id for if return while 
+computeFollow[<函数返回>] = } id for if return while 
+computeFollow[<while循环>] = } id for if return while 
+computeFollow[<赋值或函数调用>] = } id for if return while ( digit 
+computeFollow[<参数列表>] = ) 
+computeFollow[<参数>] = ) , 
+computeFollow[<参数闭包>] = ) 
+computeFollow[<字符串>] = ) , 
+computeFollow[<逻辑表达式>] = ; ) 
+computeFollow[<后缀表达式>] = ) 
+computeFollow[<逻辑运算符>] = ( id digit 
+computeFollow[<后缀运算符>] = ) 
+computeFollow[<否则语句>] = } id for if return while 
+
+-----------------------------Select集-----------------------------
+
+computeSelect[1] = describe type 
+computeSelect[2] = describe 
+computeSelect[3] = type 
+computeSelect[4] = describe 
+computeSelect[5] = type 
+computeSelect[6] = * id 
+computeSelect[7] = * 
+computeSelect[8] = id 
+computeSelect[9] = * 
+computeSelect[10] = id 
+computeSelect[11] = id 
+computeSelect[12] = [ 
+computeSelect[13] = ( ] ) , ; < > == != + - * / = += ++ -- 
+computeSelect[14] = ( 
+computeSelect[15] = id 
+computeSelect[16] = digit 
+computeSelect[17] = digit 
+computeSelect[18] = ( id digit 
+computeSelect[19] = ( id digit 
+computeSelect[20] = * 
+computeSelect[21] = / 
+computeSelect[22] = ) , ; < > == != + - 
+computeSelect[23] = + 
+computeSelect[24] = - 
+computeSelect[25] = ) , ; < > == != 
+computeSelect[26] = describe type 
+computeSelect[27] = ) 
+computeSelect[28] = describe type 
+computeSelect[29] = = 
+computeSelect[30] = += 
+computeSelect[31] = ) , ; 
+computeSelect[32] = ( id digit 
+computeSelect[33] = { 
+computeSelect[34] = digit 
+computeSelect[35] = , 
+computeSelect[36] = } 
+computeSelect[37] = , 
+computeSelect[38] = ) 
+computeSelect[39] = describe type id for if return while } 
+computeSelect[40] = describe type 
+computeSelect[41] = } id for if return while 
+computeSelect[42] = describe type 
+computeSelect[43] = id 
+computeSelect[44] = for 
+computeSelect[45] = if 
+computeSelect[46] = return 
+computeSelect[47] = while 
+computeSelect[48] = } 
+computeSelect[49] = id 
+computeSelect[50] = = 
+computeSelect[51] = += 
+computeSelect[52] = ( 
+computeSelect[53] = id digit string 
+computeSelect[54] = , 
+computeSelect[55] = ) 
+computeSelect[56] = id 
+computeSelect[57] = digit 
+computeSelect[58] = string 
+computeSelect[59] = string 
+computeSelect[60] = for 
+computeSelect[61] = ( id digit 
+computeSelect[62] = < 
+computeSelect[63] = > 
+computeSelect[64] = == 
+computeSelect[65] = != 
+computeSelect[66] = id 
+computeSelect[67] = ++ 
+computeSelect[68] = -- 
+computeSelect[69] = if 
+computeSelect[70] = else 
+computeSelect[71] = } id for if return while 
+computeSelect[72] = return 
+computeSelect[73] = while 
