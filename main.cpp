@@ -12,16 +12,10 @@ using namespace std;
 int main()
 {
     //词法分析部分
-    initKeyMapping();
-    initOperMapping();
-    initLimitMapping();
     initNode();
     scanner();
     BraMappingError();
-    printNodeLink();
-
-    printErrorLink();
-    printIdentLink();
+    printInfo();
 
     //语法分析部分
     initGrammer();

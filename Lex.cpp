@@ -46,107 +46,42 @@ struct IdentiferNode
 };
 IdentiferNode * idenHead;//首节点
 
-vector<pair<const char *,int> > keyMap;
-vector<pair<const char *,int> > operMap;
-vector<pair<const char *,int> > limitMap;
+// 静态初始化的关键字集合
+vector<pair<const char *,int>> keyMap = {
+        {"auto", AUTO}, {"break", BREAK}, {"case", CASE}, {"char", CHAR},
+        {"const", CONST}, {"continue", CONTINUE}, {"default", DEFAULT},
+        {"do", DO}, {"double", DOUBLE}, {"else", ELSE}, {"enum", ENUM},
+        {"extern", EXTERN}, {"float", FLOAT}, {"for", FOR}, {"goto", GOTO},
+        {"if", IF}, {"int", INT}, {"long", LONG}, {"register", REGISTER},
+        {"return", RETURN}, {"short", SHORT}, {"signed", SIGNED},
+        {"sizeof", SIZEOF}, {"static", STATIC}, {"struct", STRUCT},
+        {"switch", SWITCH}, {"typedef", TYPEDEF}, {"union", UNION},
+        {"unsigned", UNSIGNED}, {"void", VOID}, {"volatile", VOLATILE},
+        {"while", WHILE}, {"describe", DESCRIBE}, {"type", TYPE},
+        {"string", STRING}, {"digit", DIGIT}
+};
 
+// 静态初始化的运算符集合
+vector<pair<const char *,int>> operMap = {
+        {"!", NOT}, {"&", BYTE_AND}, {"~", COMPLEMENT}, {"^", BYTE_XOR},
+        {"*", MUL}, {"/", DIV}, {"%", MOD}, {"+", ADD}, {"-", SUB},
+        {"<", LES_THAN}, {">", GRT_THAN}, {"=", ASG}, {"->", ARROW},
+        {"++", SELF_ADD}, {"--", SELF_SUB}, {"<<", LEFT_MOVE},
+        {">>", RIGHT_MOVE}, {"<=", LES_EQUAL}, {">=", GRT_EQUAL},
+        {"==", EQUAL}, {"!=", NOT_EQUAL}, {"&&", AND}, {"||", OR},
+        {"+=", COMPLETE_ADD}, {"-=", COMPLETE_SUB}, {"*=", COMPLETE_MUL},
+        {"/=", COMPLETE_DIV}, {"^=", COMPLETE_BYTE_XOR}, {"&=", COMPLETE_BYTE_AND},
+        {"~=", COMPLETE_COMPLEMENT}, {"%=", COMPLETE_MOD}, {"|", BYTE_OR}
+};
 
+// 静态初始化的限制符集合
+vector<pair<const char *,int>> limitMap = {
+        {"(", LEFT_BRA}, {")", RIGHT_BRA}, {"[", LEFT_INDEX},
+        {"]", RIGHT_INDEX}, {"{", L_BOUNDER}, {"}", R_BOUNDER},
+        {".", POINTER}, {"#", JING}, {"_", UNDER_LINE}, {",", COMMA},
+        {";", SEMI}, {"'", SIN_QUE}, {"\"", DOU_QUE}
+};
 
-//初始化C语言的关键字的集合
-void initKeyMapping()
-{
-    keyMap.clear();
-    keyMap.push_back(make_pair("auto",AUTO));
-    keyMap.push_back(make_pair("break",BREAK));
-    keyMap.push_back(make_pair("case",CASE));
-    keyMap.push_back(make_pair("char",CHAR));
-    keyMap.push_back(make_pair("const",CONST));
-    keyMap.push_back(make_pair("continue",CONTINUE));
-    keyMap.push_back(make_pair("default",DEFAULT));
-    keyMap.push_back(make_pair("do",DO));
-    keyMap.push_back(make_pair("double",DOUBLE));
-    keyMap.push_back(make_pair("else",ELSE));
-    keyMap.push_back(make_pair("enum",ENUM));
-    keyMap.push_back(make_pair("extern",EXTERN));
-    keyMap.push_back(make_pair("float",FLOAT));
-    keyMap.push_back(make_pair("for",FOR));
-    keyMap.push_back(make_pair("goto",GOTO));
-    keyMap.push_back(make_pair("if",IF));
-    keyMap.push_back(make_pair("int",INT));
-    keyMap.push_back(make_pair("long",LONG));
-    keyMap.push_back(make_pair("register",REGISTER));
-    keyMap.push_back(make_pair("return",RETURN));
-    keyMap.push_back(make_pair("short",SHORT));
-    keyMap.push_back(make_pair("signed",SIGNED));
-    keyMap.push_back(make_pair("sizeof",SIZEOF));
-    keyMap.push_back(make_pair("static",STATIC));
-    keyMap.push_back(make_pair("struct",STRUCT));
-    keyMap.push_back(make_pair("switch",SWITCH));
-    keyMap.push_back(make_pair("typedef",TYPEDEF));
-    keyMap.push_back(make_pair("union",UNION));
-    keyMap.push_back(make_pair("unsigned",UNSIGNED));
-    keyMap.push_back(make_pair("void",VOID));
-    keyMap.push_back(make_pair("volatile",VOLATILE));
-    keyMap.push_back(make_pair("while",WHILE));
-
-    keyMap.push_back(make_pair("describe",DESCRIBE));
-    keyMap.push_back(make_pair("type",TYPE));
-    keyMap.push_back(make_pair("string",STRING));
-    keyMap.push_back(make_pair("digit",DIGIT));
-}
-void initOperMapping()
-{
-    operMap.clear();
-    operMap.push_back(make_pair("!",NOT));
-    operMap.push_back(make_pair("&",BYTE_AND));
-    operMap.push_back(make_pair("~",COMPLEMENT));
-    operMap.push_back(make_pair("^",BYTE_XOR));
-    operMap.push_back(make_pair("*",MUL));
-    operMap.push_back(make_pair("/",DIV));
-    operMap.push_back(make_pair("%",MOD));
-    operMap.push_back(make_pair("+",ADD));
-    operMap.push_back(make_pair("-",SUB));
-    operMap.push_back(make_pair("<",LES_THAN));
-    operMap.push_back(make_pair(">",GRT_THAN));
-    operMap.push_back(make_pair("=",ASG));
-    operMap.push_back(make_pair("->",ARROW));
-    operMap.push_back(make_pair("++",SELF_ADD));
-    operMap.push_back(make_pair("--",SELF_SUB));
-    operMap.push_back(make_pair("<<",LEFT_MOVE));
-    operMap.push_back(make_pair(">>",RIGHT_MOVE));
-    operMap.push_back(make_pair("<=",LES_EQUAL));
-    operMap.push_back(make_pair(">=",GRT_EQUAL));
-    operMap.push_back(make_pair("==",EQUAL));
-    operMap.push_back(make_pair("!=",NOT_EQUAL));
-    operMap.push_back(make_pair("&&",AND));
-    operMap.push_back(make_pair("||",OR));
-    operMap.push_back(make_pair("+=",COMPLETE_ADD));
-    operMap.push_back(make_pair("-=",COMPLETE_SUB));
-    operMap.push_back(make_pair("*=",COMPLETE_MUL));
-    operMap.push_back(make_pair("/=",COMPLETE_DIV));
-    operMap.push_back(make_pair("^=",COMPLETE_BYTE_XOR));
-    operMap.push_back(make_pair("&=",COMPLETE_BYTE_AND));
-    operMap.push_back(make_pair("~=",COMPLETE_COMPLEMENT));
-    operMap.push_back(make_pair("%=",COMPLETE_MOD));
-    operMap.push_back(make_pair("|",BYTE_OR));
-}
-void initLimitMapping()
-{
-    limitMap.clear();
-    limitMap.push_back(make_pair("(",LEFT_BRA));
-    limitMap.push_back(make_pair(")",RIGHT_BRA));
-    limitMap.push_back(make_pair("[",LEFT_INDEX));
-    limitMap.push_back(make_pair("]",RIGHT_INDEX));
-    limitMap.push_back(make_pair("{",L_BOUNDER));
-    limitMap.push_back(make_pair("}",R_BOUNDER));
-    limitMap.push_back(make_pair(".",POINTER));
-    limitMap.push_back(make_pair("#",JING));
-    limitMap.push_back(make_pair("_",UNDER_LINE));
-    limitMap.push_back(make_pair(",",COMMA));
-    limitMap.push_back(make_pair(";",SEMI));
-    limitMap.push_back(make_pair("'",SIN_QUE));
-    limitMap.push_back(make_pair("\"",DOU_QUE));
-}
 void initNode()
 {
     normalHead = new NormalNode();
@@ -237,25 +172,25 @@ int createNewIden(char * content,char *descirbe,int type,int addr,int line)
     return addr_temp;
 }
 
-void printNodeLink()
+void printNodeLink(ostream& outFile)
 {
     NormalNode * p = normalHead;
     p = p->next;
-    cout<<"************************************分析表******************************"<<endl<<endl;
-    cout<<setw(30)<<"内容"<<setw(10)<<"描述"<<"\t"<<"种别码"<<"\t"<<"地址"<<"\t"<<"行号"<<endl;
+    outFile<<"************************************分析表******************************"<<endl<<endl;
+    outFile<<setw(30)<<"内容"<<setw(10)<<"描述"<<"\t"<<"种别码"<<"\t"<<"地址"<<"\t"<<"行号"<<endl;
     while(p!=NULL)
     {
         if(p->type == IDENTIFER)
         {
-            cout<<setw(30)<<p->content<<setw(10)<<p->describe<<"\t"<<p->type<<"\t"<<p->addr<<"\t"<<p->line<<endl;
+            outFile<<setw(30)<<p->content<<setw(10)<<p->describe<<"\t"<<p->type<<"\t"<<p->addr<<"\t"<<p->line<<endl;
         }
         else
         {
-            cout<<setw(30)<<p->content<<setw(10)<<p->describe<<"\t"<<p->type<<"\t"<<"\t"<<p->line<<endl;
+            outFile<<setw(30)<<p->content<<setw(10)<<p->describe<<"\t"<<p->type<<"\t"<<"\t"<<p->line<<endl;
         }
         p = p->next;
     }
-    cout<<endl<<endl;
+    outFile<<endl<<endl;
 }
 /*
 错误种类：
@@ -268,32 +203,32 @@ void printNodeLink()
 7.'('没有对应项
 8.预处理错误
 */
-void printErrorLink()
+void printErrorLink(ostream& outFile)
 {
     ErrorNode * p = errorHead;
     p = p->next;
-    cout<<"************************************错误表******************************"<<endl<<endl;
-    cout<<setw(10)<<"内容"<<setw(30)<<"描述"<<"\t"<<"类型"<<"\t"<<"行号"<<endl;
+    outFile<<"************************************错误表******************************"<<endl<<endl;
+    outFile<<setw(10)<<"内容"<<setw(30)<<"描述"<<"\t"<<"类型"<<"\t"<<"行号"<<endl;
     while(p!=NULL)
     {
-        cout<<setw(10)<<p->content<<setw(30)<<p->describe<<"\t"<<p->type<<"\t"<<p->line<<endl;
+        outFile<<setw(10)<<p->content<<setw(30)<<p->describe<<"\t"<<p->type<<"\t"<<p->line<<endl;
         p = p->next;
     }
-    cout<<endl<<endl;
+    outFile<<endl<<endl;
 }
 //标志符表，有重复部分，暂不考虑
-void printIdentLink()
+void printIdentLink(ostream& outFile)
 {
     IdentiferNode * p = idenHead;
     p = p->next;
-    cout<<"************************************标志符表******************************"<<endl<<endl;
-    cout<<setw(30)<<"内容"<<setw(10)<<"描述"<<"\t"<<"种别码"<<"\t"<<"地址"<<"\t"<<"行号"<<endl;
+    outFile<<"************************************标志符表******************************"<<endl<<endl;
+    outFile<<setw(30)<<"内容"<<setw(10)<<"描述"<<"\t"<<"种别码"<<"\t"<<"地址"<<"\t"<<"行号"<<endl;
     while(p!=NULL)
     {
-        cout<<setw(30)<<p->content<<setw(10)<<p->describe<<"\t"<<p->type<<"\t"<<p->addr<<"\t"<<p->line<<endl;
+        outFile<<setw(30)<<p->content<<setw(10)<<p->describe<<"\t"<<p->type<<"\t"<<p->addr<<"\t"<<p->line<<endl;
         p = p->next;
     }
-    cout<<endl<<endl;
+    outFile<<endl<<endl;
 }
 int mystrlen(char * word)
 {
@@ -1029,4 +964,19 @@ void BraMappingError()
             }
         }
     }
+}
+
+void printInfo()
+{
+    // 打开文件输出流
+    std::ofstream outFile("lex.txt");
+
+    // 检查文件是否成功打开
+    if (!outFile) {
+        std::cerr << "无法打开文件 lex.txt" << std::endl;
+        return; // 如果文件打开失败，则返回
+    }
+    printNodeLink(outFile);
+    printErrorLink(outFile);
+    printIdentLink(outFile);
 }

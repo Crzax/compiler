@@ -34,11 +34,11 @@
 #define VOID 30
 #define VOLATILE 31
 #define WHILE 32
-#define KEY_DESC "关键字"
+#define KEY_DESC "KEYWORD"
 
 //标志符
 #define IDENTIFER 40
-#define IDENTIFER_DESC "标志符"
+#define IDENTIFER_DESC "ID"
 
 //常量
 #define INT_VAL 51 //整形常量
@@ -46,7 +46,7 @@
 #define FLOAT_VAL 53 //浮点数常量
 #define STRING_VAL 54 //双精度浮点数常量
 #define MACRO_VAL 55 //宏常量
-#define CONSTANT_DESC "常量"
+#define CONSTANT_DESC "CONST"
 
 //运算符
 #define NOT 61   // !
@@ -82,7 +82,7 @@
 #define COMPLETE_MOD 91 //%=
 #define BYTE_OR 92 // |
 
-#define OPE_DESC "运算符"
+#define OPE_DESC "OP"
 
 //限界符
 #define LEFT_BRA 100 // (
@@ -99,15 +99,15 @@
 #define SIN_QUE 111 // '
 #define DOU_QUE 112 // "
 
-#define CLE_OPE_DESC "限界符"
+#define CLE_OPE_DESC "SEP"
 
 #define NOTE1 120 // "/**/"注释
 #define NOTE2 121 // "//"注释
-#define NOTE_DESC "注释"
+#define NOTE_DESC "COM"
 
 
 #define HEADER 130 //头文件
-#define HEADER_DESC "头文件"
+#define HEADER_DESC "HD"
 
 //错误类型
 #define FLOAT_ERROR "float表示错误"
@@ -154,23 +154,16 @@ struct NormalNode
     NormalNode * next;//下一个节点
 };
 
-void initKeyMapping();
-void initOperMapping();
-void initLimitMapping();
-
 void initNode();
 void createNewNode(char * content,char *descirbe,int type,int addr,int line);
 void createNewError(char * content,char *descirbe,int type,int line);
 int createNewIden(char * content,char *descirbe,int type,int addr,int line);
-void printNodeLink();
-void printErrorLink();
-void printIdentLink();
 int mystrlen(char * word);
 void preProcess(char * word,int line);
 void close();
 int seekKey(char * word);
 void scanner();
 void BraMappingError();
-
+void printInfo();
 
 #endif 
