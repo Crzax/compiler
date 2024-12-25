@@ -1,13 +1,8 @@
-#include <iostream>
-#include <fstream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <iomanip>
+//
+// Created by Crzax on 12/12/2024.
+//
 #include "Lex.h"
 #include "Parser.h"
-
-using namespace std;
 
 int main()
 {
@@ -24,6 +19,5 @@ int main()
     Select();
     LL1Table();
     Analysis();
-    close();
     return 0;
 }

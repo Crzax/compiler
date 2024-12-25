@@ -8,7 +8,6 @@
 #define GRAMMAR_BASE 2010 //动态生成的基值  
 
 #define Stack_Size 5000
-
 void initGrammer();
 int seekCodeNum(char * word);
 void First();
@@ -16,4 +15,4 @@ void Follow();
 void Select();
 void LL1Table();
 void Analysis();
-#endif  
+#endif
