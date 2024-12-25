@@ -1,12 +1,11 @@
 #include <iostream>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <conio.h>
 #include <fstream>
 #include <vector>
-#include <conio.h>
 #include "Lex.h"
+#include <stack>
 #include "Parser.h"
 
 using namespace std;
@@ -20,21 +19,20 @@ using namespace std;
 
 int procNum = 0;
 //proc的维数都是从1开始的
-int proc[Max_Proc][Max_Length];//产生式的数组，里边存储了终结符或者非终结符对应的编号
+int proc[Max_Proc][Max_Length]; // 产生式的数组，里边存储了终结符或者非终结符对应的编号
 int first[Max_Proc][Max_Length];
 int follow[Max_Proc][Max_Length];
 int select[Max_Proc][Max_Length];
-int M[Max_NonTer][Max_Ter][Max_Length2];
+int M[Max_NonTer][Max_Ter][Max_Length2]; // LL(1) 分析表
 
-int connectFirst[Max_Length];//将某些First集结合起来的集合
+int connectFirst[Max_Length]; // 将某些First集结合起来的集合
 
+int firstVisit[Max_Proc]; // 记录某非终结符的First集是否已经求过
+int followVisit[Max_Proc]; // 记录某非终结符的Follow集是否已经求过
 
-int firstVisit[Max_Proc];//记录某非终结符的First集是否已经求过
-int followVisit[Max_Proc];//记录某非终结符的Follow集是否已经求过
-
-int empty[Max_Proc];//可推出空的非终结符的编号
-int emptyRecu[Max_Proc];//在求可推出空的非终结符的编号集时使用的防治递归的集合
-int followRecu[Max_Proc];//在求Follow集时使用的防治递归的集合
+int empty[Max_Proc]; // 可推出空的非终结符的编号
+int emptyRecu[Max_Proc]; // 在求可推出空的非终结符的编号集时使用的防止递归的集合
+int followRecu[Max_Proc]; // 在求Follow集时使用的防止递归的集合
 
 //extern的部分代表可能出现的终结符和其编号
 extern vector<pair<const char *,int> > keyMap;
@@ -47,18 +45,14 @@ fstream resultfile;
 
 vector<pair<const char *,int> > nonTerMap;//非终结符映射表,不可重复的
 vector<pair<const char *,int> > terMap;//终结符映射表,不可重复的
-vector<pair<const char *,int> > specialMap;//文法中的特殊符号映射表，包括-> | $(空)
+// 将特殊符号映射表定义为静态常量
+const std::vector<std::pair<const char *, int>> specialMap = {
+        {"->", GRAMMAR_ARROW},
+        {"|", GRAMMAR_OR},
+        {"$", GRAMMAR_NULL},
+        {"#", GRAMMAR_SPECIAL}
+};
 
-
-void initSpecialMapping()
-{
-    specialMap.clear();
-    specialMap.push_back(make_pair("->",GRAMMAR_ARROW));
-    specialMap.push_back(make_pair("|",GRAMMAR_OR));
-    specialMap.push_back(make_pair("$",GRAMMAR_NULL));
-    specialMap.push_back(make_pair("#",GRAMMAR_SPECIAL));
-
-}
 const char * searchMapping(int num)
 {
     //标志符
@@ -120,8 +114,9 @@ int dynamicNonTer(char *word)
     }
     return dynamicNum;
 }
+
 //判断某个标号是不是非终结符的标号,1代表是，0代表否
-int inNonTer(int n)
+int isNonTer(int n)
 {
     for(int i=0; i<nonTerMap.size(); i++)
     {
@@ -133,7 +128,7 @@ int inNonTer(int n)
     return 0;
 }
 //判断某个标号是不是终结符的标号，1代表是，0代表否
-int inTer(int n)
+int isTer(int n)
 {
     for(int i=0; i<terMap.size(); i++)
     {
@@ -341,7 +336,6 @@ void initGrammer()
         printf("文法打开失败！\n");
         return;
     }
-    initSpecialMapping();
     nonTerMap.clear();
     terMap.clear();
 
@@ -526,7 +520,7 @@ int reduNull(int currentNon)
                 return 1;
             }
                 //如果长度为1，并且是终结符
-            else if(rightLength -2 == 1 && inTer(proc[j][rightLength]))
+            else if(rightLength -2 == 1 && isTer(proc[j][rightLength]))
             {
                 return 0;
             }
@@ -580,7 +574,7 @@ void firstSet(int i)
         if(currentNon == proc[j][1])//注意从1开始
         {
             //当右边的第一个是终结符或者空的时候
-            if(inTer(proc[j][3]) == 1 || proc[j][3] == GRAMMAR_NULL)
+            if(isTer(proc[j][3]) == 1 || proc[j][3] == GRAMMAR_NULL)
             {
                 //并入当前非终结符的first集中
                 int temp[2];
@@ -589,7 +583,7 @@ void firstSet(int i)
                 merge(first[i],temp,1);
             }
                 //当右边的第一个是非终结符的时候
-            else if(inNonTer(proc[j][3]) == 1)
+            else if(isNonTer(proc[j][3]) == 1)
             {
                 //如果遇到左递归形式的，直接放过？
                 if(proc[j][3] == currentNon)
@@ -1020,7 +1014,7 @@ void Select()
     }
 }
 //输出预测分析表  
-void MTable()
+void LL1Table()
 {
     fstream outfile;
     outfile.open("preciateTable.txt",ios::out);
@@ -1087,66 +1081,30 @@ void MTable()
     outfile.close();
 }
 
-void InitStack(SeqStack *S)    /*初始化顺序栈*/
+void ShowStack(std::stack<int> s, std::fstream &resultfile)  // 传递栈的副本
 {
-    S->top = -1;
-}
-int Push(SeqStack *S,int x)   /*进栈*/
-{
-    if(S->top ==Stack_Size-1)
-        return 0;
-    S->top++;
-    S->elem[S->top]=x;
-    return 1;
-}
-int Pop(SeqStack *S)   /*出栈*/
-{
-    if(S->top==-1)
-        return 0;
-    else
-    {
-        S->top--;
-        return 1;
+    std::stack<int> temp;
+    // 将原栈的内容拷贝到另一个栈用于输出
+    while (!s.empty()) {
+        temp.push(s.top());
+        s.pop();
     }
-}
-int GetTop(SeqStack *S,int *x)   /*取栈顶元素*/
-{
-    if(S->top==-1)
-        return 0;
-    else
-    {
-        *x=S->elem[S->top];
-        return 1;
-    }
-}
-void ShowStack1(SeqStack *S)   /*显示栈的字符，先输出栈底元素*/
-{
 
-    int i;
-    for(i=S->top; i>=0; i--)
-    {
-        //printf("%s ",searchMapping(S->elem[i]));  
-        resultfile<<searchMapping(S->elem[i])<<" ";
+    // 从临时栈输出元素（逆序）
+    while (!temp.empty()) {
+        resultfile << searchMapping(temp.top()) << " ";
+        temp.pop();
     }
 }
-void ShowStack2(SeqStack *S)   /*显示栈的字符，先输出栈顶元素*/
-{
 
-    int i;
-    for(i=S->top; i>=0; i--)
-    {
-        //printf("%s ",searchMapping(S->elem[i]));  
-        resultfile<<searchMapping(S->elem[i])<<" ";
-    }
-}
-//分析源程序  
+//分析源程序
 void Analysis()
 {
     //分析结果输出  
 
     resultfile.open("preciateResult.txt",ios::out);
 
-    SeqStack s1,s2;
+    stack<int> s1,s2;
     int c1,c2;
     int i = 0;
     int reserve[Stack_Size];//符号栈反向入栈  
@@ -1154,11 +1112,9 @@ void Analysis()
     int s1Length = 0;
     memset(reserve,-1,sizeof(reserve));
 
-    InitStack(&s1);  /*初始化符号栈和输入串*/
-    InitStack(&s2);
-    Push(&s1,GRAMMAR_SPECIAL);
-    Push(&s1,proc[1][1]);
-    Push(&s2,GRAMMAR_SPECIAL);
+    s1.push(GRAMMAR_SPECIAL);
+    s1.push(proc[1][1]);
+    s2.push(GRAMMAR_SPECIAL);
 
     p = p->next;
     while(p!=NULL)
@@ -1208,7 +1164,7 @@ void Analysis()
     //反向入栈  
     for(i = s1Length; i>0; i--)
     {
-        Push(&s2,reserve[i-1]);
+        s2.push(reserve[i-1]);
     }
 
     for(i=0;; i++)   /*分析*/
@@ -1221,17 +1177,17 @@ void Analysis()
         resultfile<<"第"<<i + 1<<"步"<<endl;
         //printf("符号栈:");  
         resultfile<<"符号栈:";
-        ShowStack1(&s1);
+        ShowStack(s1, resultfile);
         //printf("\n");  
         resultfile<<endl;
         //printf("输入栈:");  
         resultfile<<"输入栈:";
-        ShowStack2(&s2);
+        ShowStack(s2, resultfile);
         //printf("\n");  
         resultfile<<endl;
 
-        GetTop(&s1,&c1);   /*取栈顶元素，记为c1，c2*/
-        GetTop(&s2,&c2);
+        c1 = s1.top();
+        c2 = s2.top();
         if(c1 == GRAMMAR_SPECIAL && c2 == GRAMMAR_SPECIAL)  /*当符号栈和输入栈都剩余#时，分析成功*/
         {
             //printf("成功!\n");  
@@ -1246,8 +1202,8 @@ void Analysis()
         }
         if(c1 == c2)/*符号栈的栈顶元素和输入串的栈顶元素相同时，同时弹出*/
         {
-            Pop(&s1);
-            Pop(&s2);
+            s1.pop();
+            s2.pop();
             flag = 1;
         }
 
@@ -1286,13 +1242,13 @@ void Analysis()
                         break;
                     }
                 }
-                Pop(&s1);
+                s1.pop();
                 //如果不是空的话，反向入栈  
                 if(M[h1][h2][2] != GRAMMAR_NULL)
                 {
                     for(int k = length-1; k>=2; k--)
                     {
-                        Push(&s1,M[h1][h2][k]);
+                        s1.push(M[h1][h2][k]);
                     }
                 }
             }

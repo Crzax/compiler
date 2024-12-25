@@ -22,7 +22,7 @@ int main()
     First();
     Follow();
     Select();
-    MTable();
+    LL1Table();
     Analysis();
     close();
     return 0;

@@ -9,18 +9,11 @@
 
 #define Stack_Size 5000
 
-typedef struct
-{
-    int elem[Stack_Size];
-    int top;
-} SeqStack;
-
 void initGrammer();
 int seekCodeNum(char * word);
-void ceshi();
 void First();
 void Follow();
 void Select();
-void MTable();
+void LL1Table();
 void Analysis();
 #endif  
