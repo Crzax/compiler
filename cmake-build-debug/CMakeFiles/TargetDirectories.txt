@@ -1,3 +1,0 @@
-E:/CmyCz/Desktop/Compiler/Practice/LexAndParser/cmake-build-debug/CMakeFiles/LexAndParser.dir
-E:/CmyCz/Desktop/Compiler/Practice/LexAndParser/cmake-build-debug/CMakeFiles/edit_cache.dir
-E:/CmyCz/Desktop/Compiler/Practice/LexAndParser/cmake-build-debug/CMakeFiles/rebuild_cache.dir

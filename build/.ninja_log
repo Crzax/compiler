@@ -1,0 +1,9 @@
+# ninja log v6
+48	530	7568498725197800	CMakeFiles/LexAndParser.dir/main.cpp.obj	ca54ac27215d5b3b
+37	727	7568498725039702	CMakeFiles/LexAndParser.dir/Lex.cpp.obj	41fffde6cb4b5471
+20	867	7568499611848852	CMakeFiles/LexAndParser.dir/Parser.cpp.obj	5b3e0555014dbb5f
+869	1200	7568499620408210	LexAndParser.exe	a5b1e99029fd51a1
+22	400	7568505352023729	CMakeFiles/LexAndParser.dir/src/main.cpp.obj	1bb8c0bbfe939b42
+12	597	7568505351867036	CMakeFiles/LexAndParser.dir/src/Lex.cpp.obj	8a751d3fef816fd3
+17	882	7568505351867036	CMakeFiles/LexAndParser.dir/src/Parser.cpp.obj	d6f1501889c3a406
+884	1205	7568505360581031	LexAndParser.exe	128fb7b0b5e1ff13

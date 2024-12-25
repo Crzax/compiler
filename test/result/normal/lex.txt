@@ -1,0 +1,172 @@
+----------------------------------符号表----------------------------------
+
+                        内容    描述	种别码	地址	行号
+                           int   KEYWORD	17		1
+                          main        ID	40	1	1
+                             (       SEP	100		1
+                             )       SEP	101		1
+                             {       SEP	104		2
+                           int   KEYWORD	17		3
+                             i        ID	40	2	3
+                             =        OP	72		3
+                             7     CONST	51		3
+                             ;       SEP	110		3
+                           int   KEYWORD	17		4
+                             j        ID	40	3	4
+                             =        OP	72		4
+                             9     CONST	51		4
+                             ;       SEP	110		4
+                           int   KEYWORD	17		5
+                             c        ID	40	4	5
+                             [       SEP	102		5
+                            20     CONST	51		5
+                             ]       SEP	103		5
+                             =        OP	72		5
+                             {       SEP	104		7
+                             2     CONST	51		7
+                             ,       SEP	109		7
+                            10     CONST	51		7
+                             ,       SEP	109		7
+                            10     CONST	51		7
+                             ,       SEP	109		7
+                            19     CONST	51		7
+                             ,       SEP	109		7
+                             3     CONST	51		7
+                             ,       SEP	109		7
+                             4     CONST	51		7
+                             ,       SEP	109		7
+                             5     CONST	51		7
+                             ,       SEP	109		7
+                             5     CONST	51		7
+                             ,       SEP	109		7
+                            34     CONST	51		7
+                             ,       SEP	109		7
+                             6     CONST	51		7
+                             ,       SEP	109		7
+                            54     CONST	51		7
+                             ,       SEP	109		7
+                            52     CONST	51		7
+                             ,       SEP	109		7
+                            34     CONST	51		7
+                             ,       SEP	109		7
+                            55     CONST	51		7
+                             ,       SEP	109		7
+                            68     CONST	51		7
+                             ,       SEP	109		7
+                            10     CONST	51		7
+                             ,       SEP	109		7
+                            90     CONST	51		7
+                             ,       SEP	109		7
+                            78     CONST	51		7
+                             ,       SEP	109		7
+                            56     CONST	51		7
+                             ,       SEP	109		7
+                            20     CONST	51		7
+                             }       SEP	105		7
+                             ;       SEP	110		7
+                           for   KEYWORD	14		8
+                             (       SEP	100		8
+                             i        ID	40	2	8
+                             =        OP	72		8
+                             0     CONST	51		8
+                             ;       SEP	110		8
+                             i        ID	40	2	8
+                             <        OP	70		8
+                            20     CONST	51		8
+                             ;       SEP	110		8
+                             i        ID	40	2	8
+                            ++        OP	74		8
+                             )       SEP	101		8
+                             {       SEP	104		9
+                           for   KEYWORD	14		10
+                             (       SEP	100		10
+                             j        ID	40	3	10
+                             =        OP	72		10
+                             i        ID	40	2	10
+                             +        OP	68		10
+                             1     CONST	51		10
+                             ;       SEP	110		10
+                             j        ID	40	3	10
+                             <        OP	70		10
+                            20     CONST	51		10
+                             ;       SEP	110		10
+                             j        ID	40	3	10
+                            --        OP	75		10
+                             )       SEP	101		10
+                             {       SEP	104		11
+                            if   KEYWORD	16		12
+                             (       SEP	100		12
+                             j        ID	40	3	12
+                            ==        OP	80		12
+                            19     CONST	51		12
+                             )       SEP	101		12
+                             {       SEP	104		13
+                             c        ID	40	4	14
+                             [       SEP	102		14
+                             i        ID	40	2	14
+                             ]       SEP	103		14
+                             =        OP	72		14
+                             j        ID	40	3	14
+                             ;       SEP	110		14
+                             }       SEP	105		15
+                             }       SEP	105		16
+                             }       SEP	105		17
+                         while   KEYWORD	32		19
+                             (       SEP	100		19
+                             i        ID	40	2	19
+                             <        OP	70		19
+                            30     CONST	51		19
+                             )       SEP	101		19
+                             {       SEP	104		20
+                             i        ID	40	2	21
+                             =        OP	72		21
+                             i        ID	40	2	21
+                             +        OP	68		21
+                             j        ID	40	3	21
+                             *        OP	65		21
+                             6     CONST	51		21
+                             ;       SEP	110		21
+                             }       SEP	105		22
+                        printf        ID	40	5	23
+                             (       SEP	100		23
+                             "       SEP	112		23
+                   Hello world     CONST	54		23
+                             "       SEP	112		23
+                             )       SEP	101		23
+                             ;       SEP	110		23
+                        return   KEYWORD	20		24
+                             0     CONST	51		24
+                             ;       SEP	110		24
+                             }       SEP	105		25
+
+
+----------------------------------错误表----------------------------------
+
+    内容                        描述	类型	行号
+
+
+----------------------------------标志符表----------------------------------
+
+                        内容    描述	种别码	地址	行号
+                          main        ID	40	1	1
+                             i        ID	40	2	3
+                             j        ID	40	3	4
+                             c        ID	40	4	5
+                             i        ID	40	2	8
+                             i        ID	40	2	8
+                             i        ID	40	2	8
+                             j        ID	40	3	10
+                             i        ID	40	2	10
+                             j        ID	40	3	10
+                             j        ID	40	3	10
+                             j        ID	40	3	12
+                             c        ID	40	4	14
+                             i        ID	40	2	14
+                             j        ID	40	3	14
+                             i        ID	40	2	19
+                             i        ID	40	2	21
+                             i        ID	40	2	21
+                             j        ID	40	3	21
+                        printf        ID	40	5	23
+
+
