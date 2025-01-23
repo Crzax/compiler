@@ -51,13 +51,13 @@ For convenient testing, a Python script is provided to call the program and gene
 Navigate to the `test` folder. To analyze all files, use:
 
 ```bash
-python3 test.py 
+python test.py 
 ```
 
 To analyze a specific file, such as `test.cpp`, use:
 
 ```bash
-python3 test.py test.cpp
+python test.py test.cpp
 ```
 
 The generated results will be placed in the `result` folder. The analysis results for each file will be placed in a corresponding folder with the same name, for example, results for `test.cpp` will be in the `test` folder within `result`.

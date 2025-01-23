@@ -51,13 +51,13 @@ ninja
 进入`test`文件夹，如果想对所有文件都进行解析，那就使用
 
 ```bash
-python3 test.py 
+python test.py 
 ```
 
 如果只想针对单个文件进行解析，比如`test.cpp`，那就使用
 
 ```bash
-python3 test.py test.cpp
+python test.py test.cpp
 ```
 
 生成的结果会放入`result`文件夹，对应文件的解析结果会放入到对应名字的文件夹内，比如`test.cpp`的文件的结果就会放入`result`文件夹的`test`文件夹内
