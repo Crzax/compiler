@@ -6,7 +6,6 @@
 
 ## 项目文件夹介绍
 
-- `build`: 生成的程序位置
 - `include`:词法解析与语法分析的代码头文件
 - `REF`: 参考项目
 - `src`: 词法解析与语法分析的代码源文件
@@ -18,9 +17,16 @@
 
 ### 生成词法解析与语法分析程序
 
+在该项目目录下创建一个`build`文件夹:
+
+```bash
+mkdir build
+```
+
 进入`build`文件夹，生成ninja配置文件:
 
 ```bash
+cd build
 cmake ..
 ```
 
@@ -63,4 +69,3 @@ python3 test.py test.cpp
 - ParserResult.txt: LL(1)的分析过程和语法树结果，其中语法树同样缩进表示在语法树的同一层
 
 这里给出了两个简单的测试文件，分别是normal.cpp和erro.cpp，位于`test/case`文件夹内，生成的结果位于`test/result`文件夹内，它们分别表示正常情况和异常情况。
-
