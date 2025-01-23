@@ -111,33 +111,37 @@
                              }       SEP	105		15
                              }       SEP	105		16
                              }       SEP	105		17
-                         while   KEYWORD	32		19
-                             (       SEP	100		19
-                             i        ID	40	2	19
-                             <        OP	70		19
-                            30     CONST	51		19
-                             )       SEP	101		19
-                             {       SEP	104		20
-                             i        ID	40	2	21
-                             =        OP	72		21
-                             i        ID	40	2	21
-                             +        OP	68		21
-                             j        ID	40	3	21
-                             *        OP	65		21
-                             6     CONST	51		21
-                             ;       SEP	110		21
-                             }       SEP	105		22
-                        printf        ID	40	5	23
-                             (       SEP	100		23
-                             "       SEP	112		23
-                   Hello world     CONST	54		23
-                             "       SEP	112		23
-                             )       SEP	101		23
+                         while   KEYWORD	32		18
+                             (       SEP	100		18
+                             i        ID	40	2	18
+                             <        OP	70		18
+                            20     CONST	51		18
+                             )       SEP	101		18
+                             {       SEP	104		19
+                             i        ID	40	2	20
+                             =        OP	72		20
+                             i        ID	40	2	20
+                             +        OP	68		20
+                             6     CONST	51		20
+                             *        OP	65		20
+                             (       SEP	100		20
+                             j        ID	40	3	20
+                             +        OP	68		20
+                             3     CONST	51		20
+                             )       SEP	101		20
+                             ;       SEP	110		20
+                             }       SEP	105		21
+                        printf        ID	40	5	22
+                             (       SEP	100		22
+                             "       SEP	112		22
+                   Hello world     CONST	54		22
+                             "       SEP	112		22
+                             )       SEP	101		22
+                             ;       SEP	110		22
+                        return   KEYWORD	20		23
+                             0     CONST	51		23
                              ;       SEP	110		23
-                        return   KEYWORD	20		24
-                             0     CONST	51		24
-                             ;       SEP	110		24
-                             }       SEP	105		25
+                             }       SEP	105		24
 
 
 ----------------------------------错误表----------------------------------
@@ -163,10 +167,10 @@
                              c        ID	40	4	14
                              i        ID	40	2	14
                              j        ID	40	3	14
-                             i        ID	40	2	19
-                             i        ID	40	2	21
-                             i        ID	40	2	21
-                             j        ID	40	3	21
-                        printf        ID	40	5	23
+                             i        ID	40	2	18
+                             i        ID	40	2	20
+                             i        ID	40	2	20
+                             j        ID	40	3	20
+                        printf        ID	40	5	22
 
 
