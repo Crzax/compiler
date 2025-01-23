@@ -1,5 +1,7 @@
 # C/C++词法解析与语法分析
 
+[English Version](README-EN.md)
+
 ## 项目简介
 
 这个项目实现了一个C/C++词法解析与语法分析器。词法解析生成中间结果为符号表、错误表和标识符表。语法分析使用LL(1)分析法，生成结果为文法、LL(1)分析表、First集Follow集Select集、LL(1)分析过程以及语法分析树文件。该项目同时是武汉大学编译原理课程两次实习作业。
@@ -62,10 +64,10 @@ python3 test.py test.cpp
 
 ### 生成的结果文件介绍
 
-- grammar.txt: 根据产生式、teminal和non-terminal生成的文法文件
-- lex.txt: 词法解析的中间结果，包括符号表、错误表和标识符表
-- LL(1)Table.txt: LL(1)分析表
-- parser.txt: 得到的First集、Follow集和Select集
-- ParserResult.txt: LL(1)的分析过程和语法树结果，其中语法树同样缩进表示在语法树的同一层
+- `grammar.txt`: 根据产生式、teminal和non-terminal生成的文法文件
+- `lex.txt`: 词法解析的中间结果，包括符号表、错误表和标识符表
+- `LL(1)Table.txt`: LL(1)分析表
+- `parser.txt`: 得到的First集、Follow集和Select集
+- `ParserResult.txt`: LL(1)的分析过程和语法树结果，其中语法树同样缩进表示在语法树的同一层
 
 这里给出了两个简单的测试文件，分别是normal.cpp和erro.cpp，位于`test/case`文件夹内，生成的结果位于`test/result`文件夹内，它们分别表示正常情况和异常情况。
